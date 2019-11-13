@@ -1,0 +1,52 @@
+---
+php_fpm_var_lib_path: "/var/lib/php/*"
+php_fpm_var_log_dir: "/var/log/php{{ php_version }}-fpm.log"
+
+fpm_service: "php{{ php_version }}-fpm"
+init_system: service
+
+php_packages:
+  - "php{{ php_version }}-dev"
+  - "php{{ php_version }}-fpm"
+#    - "php{{ php_version }}-cli"
+#    - "php{{ php_version }}-common"
+  - "php{{ php_version }}-soap"
+  - "php{{ php_version }}-xml"
+  - "php{{ php_version }}-zip"
+  - "php{{ php_version }}-mbstring"
+  - "php{{ php_version }}-bcmath"
+  - "php{{ php_version }}-curl"
+  - "php{{ php_version }}-gd"
+  - "php{{ php_version }}-intl"
+#    - "php{{ php_version }}-json"
+#  - "php{{ php_version }}-mcrypt"
+  - "php{{ php_version }}-mysqlnd"
+  - "php{{ php_version }}-opcache"
+#    - "php{{ php_version }}-readline"
+  - "php{{ php_version }}-sqlite3"
+  - "php{{ php_version }}-tidy"
+  - "php{{ php_version }}-xmlrpc"
+  - "php{{ php_version }}-xsl"
+  - php-apcu
+  - php-gmagick
+
+php_conf_d: "/etc/php/{{ php_version }}/mods-available"
+
+php_ini_files:
+  - "/etc/php/{{ php_version }}/fpm/php.ini"
+  - "/etc/php/{{ php_version }}/cli/php.ini"
+
+fpm_pool: "/etc/php/{{ php_version }}/fpm/pool.d/www.conf"
+fpm_pool_options:
+  - name: listen
+    value: "/run/php/php{{ php_version }}-fpm.sock"
+  - name: listen.owner
+    value: "{{ php_fpm_user }}"
+  - name: listen.group
+    value: "{{ php_fpm_group }}"
+  - name: listen.mode
+    value: '0660'
+  - name: user
+    value: "{{ php_fpm_user }}"
+  - name: group
+    value: "{{ php_fpm_group }}"

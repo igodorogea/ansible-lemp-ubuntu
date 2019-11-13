@@ -1,0 +1,19 @@
+---
+nginx_user: "{{ web_user | default('www-data') }}"
+nginx_group: "{{ web_group | default('www-data') }}"
+nginx_home: "{{ web_home | default('/var/www') }}"
+nginx_home_dir_mode: 'ug=rwX,o=rX'
+nginx_worker_processes: "{{ ansible_processor_vcpus }}"
+nginx_pid: /var/run/nginx.pid
+nginx_error_log: /var/log/nginx/error.log warn
+nginx_conf_dir: /etc/nginx/sites-enabled
+nginx_default_site: /etc/nginx/sites-enabled/default
+nginx_php_fpm_socket: /run/php/php7.3-fpm.sock
+nginx_php_fpm_upstream: 'unix:{{ nginx_php_fpm_socket }}'
+
+nginx_var_lib_dirs:
+  - /var/lib/nginx
+  - /var/lib/nginx/tmp
+nginx_var_lib_tmp_path: /var/lib/nginx/tmp/*
+nginx_var_cache_path: /var/cache/nginx/*
+nginx_var_log_dir: /var/log/nginx

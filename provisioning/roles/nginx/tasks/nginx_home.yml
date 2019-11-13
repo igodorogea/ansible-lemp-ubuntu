@@ -1,0 +1,30 @@
+---
+- name: 'Nginx setup: Create server home dir'
+  file:
+    path: "{{ nginx_home }}"
+    state: directory
+  notify: nginx fix file permissions
+
+- name: 'Nginx setup: Delete default site directory'
+  file:
+    path: "{{ nginx_home }}/html"
+    state: absent
+  notify: nginx fix file permissions
+
+- name: 'Nginx setup: Create default site directory'
+  file:
+    path: "{{ nginx_home }}/sites/html"
+    state: directory
+  notify: nginx fix file permissions
+
+- name: 'Nginx setup: add index.html file'
+  template:
+    src: index.html
+    dest: "{{ nginx_home }}/sites/html/index.html"
+  notify: nginx fix file permissions
+
+- name: 'Nginx setup: add info.php file'
+  template:
+    src: info.php
+    dest: "{{ nginx_home }}/sites/html/info.php"
+  notify: nginx fix file permissions

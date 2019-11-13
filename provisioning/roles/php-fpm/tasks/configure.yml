@@ -1,0 +1,40 @@
+---
+- stat: "path={{ item }}.bak"
+  register: php_ini_bak
+  with_items: "{{ php_ini_files }}"
+
+- name: Backup php.ini files
+  shell: >
+    cp {{ item.item }} {{ item.item }}.bak
+    creates={{ item.item }}.bak
+  when: not item.stat.exists
+  with_items: "{{ php_ini_bak.results }}"
+
+- name: Configure php.ini
+  ini_file: path={{ item[0] }} section=PHP option={{ item[1].name }} value={{ item[1].value }}
+  with_nested:
+    - "{{ php_ini_files }}"
+    - "{{ php_ini_options }}"
+  notify: restart php-fpm
+
+- name: Configure opcache.ini
+  ini_file:
+    path: "{{ php_conf_d }}/opcache.ini"
+    section: ''
+    option: 'opcache.max_accelerated_files'
+    value: '32000'
+    backup: yes
+
+- stat: "path={{ fpm_pool }}.bak"
+  register: fpm_pool_bak
+
+- name: Backup fpm_pool file
+  shell: >
+    cp {{ fpm_pool }} {{ fpm_pool }}.bak
+    creates={{ fpm_pool }}.bak
+  when: not fpm_pool_bak.stat.exists
+
+- name: Configure fpm_pool
+  ini_file: path={{ fpm_pool }} section=www option={{ item.name }} value={{ item.value }}
+  with_items: "{{ fpm_pool_options }}"
+  notify: restart php-fpm

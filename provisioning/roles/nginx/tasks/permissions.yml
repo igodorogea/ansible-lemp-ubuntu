@@ -1,0 +1,21 @@
+---
+- name: Update permissions for php fpm socket
+  shell: "chown {{ nginx_user }}:{{ nginx_group }} {{ nginx_php_fpm_socket }}"
+  ignore_errors: yes
+
+- name: Update permissions for nginx lib dirs
+  shell: "chown {{ nginx_user }}:{{ nginx_group }} {{ item }}"
+  with_items: "{{ nginx_var_lib_dirs }}"
+  ignore_errors: yes
+
+- name: Update permissions for nginx lib tmp dir
+  shell: "chown -R {{ nginx_user }}: {{ nginx_var_lib_tmp_path }}"
+  ignore_errors: yes
+
+- name: Update permissions for nginx cache dir
+  shell: "chown -R {{ nginx_user }}: {{ nginx_var_cache_path }}"
+  ignore_errors: yes
+
+- name: Update permissions for nginx log dir
+  shell: "chown -R {{ nginx_user }}:{{ nginx_group }} {{ nginx_var_log_dir }}"
+  ignore_errors: yes

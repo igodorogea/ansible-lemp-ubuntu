@@ -1,0 +1,29 @@
+---
+- name: Ensure default web GROUP exists
+  group:
+    name: "{{ web_group }}"
+    state: present
+
+- name: Ensure default web USER exists
+  user:
+    comment: "{{ web_user }}"
+    name: "{{ web_user }}"
+    group: "{{ web_group }}"
+    shell: "{{ web_shell }}"
+    home: "{{ web_home }}"
+
+- name: OHMYZSH - Clone ohmyzsh
+  git:
+    repo: "https://github.com/robbyrussell/oh-my-zsh.git"
+    dest: "{{ web_home }}/.oh-my-zsh"
+  become_user: "{{ web_user }}"
+
+- name: OHMYZSH - create ~/.zshrc
+  copy:
+    src: "{{ web_home }}/.oh-my-zsh/templates/zshrc.zsh-template"
+    dest: "{{ web_home }}/.zshrc"
+  become_user: "{{ web_user }}"
+
+- name: OHMYZSH - fix theme
+  shell: "sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"pygmalion\"/g' {{ web_home }}/.zshrc"
+  become_user: "{{ web_user }}"

@@ -1,0 +1,21 @@
+---
+- name: Set default user shell to zsh
+  user:
+    name: "{{ user }}"
+    shell: "{{ user_shell }}"
+
+- name: OHMYZSH - Clone ohmyzsh
+  git:
+    repo: "https://github.com/robbyrussell/oh-my-zsh.git"
+    dest: "{{ home }}/.oh-my-zsh"
+  become_user: "{{ user }}"
+
+- name: OHMYZSH - create ~/.zshrc
+  copy:
+    src: "{{ home }}/.oh-my-zsh/templates/zshrc.zsh-template"
+    dest: "{{ home }}/.zshrc"
+  become_user: "{{ user }}"
+
+- name: OHMYZSH - fix theme
+  shell: "sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"pygmalion\"/g' {{ home }}/.zshrc"
+  become_user: "{{ user }}"

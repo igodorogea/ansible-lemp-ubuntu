@@ -1,0 +1,8 @@
+---
+user: ubuntu
+home: "/home/{{ user }}"
+user_shell: /usr/bin/zsh
+web_user: www-data
+web_group: "{{ web_user }}"
+web_home: /var/www
+web_shell: "{{ user_shell }}"

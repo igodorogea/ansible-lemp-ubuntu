@@ -1,0 +1,8 @@
+---
+- name: Update permissions for php lib dirs
+  shell: "chown -R :{{ php_fpm_group }} {{ php_fpm_var_lib_path }}"
+  ignore_errors: yes
+
+- name: Update permissions for php log dir
+  shell: "chown -R {{ php_fpm_user }}: {{ php_fpm_var_log_dir }}"
+  ignore_errors: yes

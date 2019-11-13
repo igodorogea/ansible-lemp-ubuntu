@@ -1,0 +1,31 @@
+---
+php_version: 7.3
+composer_path: /usr/bin
+php_fpm_user: "{{ web_user | default('www-data') }}"
+php_fpm_group: "{{ web_group | default('www-data') }}"
+php_fpm_var_lib_path: "/var/lib/php/{{ php_version }}/*"
+php_fpm_var_log_dir: "/var/log/php-fpm/{{ php_version }}"
+
+php_ini_options:
+  - name: expose_php
+    value: 'Off'
+  - name: memory_limit
+    value: 256M
+  - name: post_max_size
+    value: 20M
+  - name: upload_max_filesize
+    value: 20M
+  - name: date.timezone
+    value: Europe/Berlin
+  - name: max_execution_time
+    value: 240
+  - name: max_input_vars
+    value: 1500
+  - name: display_errors
+    value: stderr
+  - name: display_startup_errors
+    value: 'Off'
+  - name: error_reporting
+    value: E_ALL
+  - name: realpath_cache_size
+    value: 128k

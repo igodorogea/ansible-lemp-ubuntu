@@ -1,0 +1,22 @@
+---
+- include: nginx_home.yml
+- name: Ensure nginx is installed.
+  apt:
+    name: nginx
+    state: latest
+
+- name: Ensure nginx is started and enabled to start at boot.
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Configure nginx
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    backup: yes
+  notify: reload nginx
+
+- include: permissions.yml
+- include: default_site.yml

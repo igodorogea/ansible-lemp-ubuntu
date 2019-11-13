@@ -1,0 +1,19 @@
+---
+- name: Install Ondrej PHP PPA
+  apt_repository: repo="ppa:ondrej/php"
+
+- name: Install PHP Modules
+  apt:
+    name: "{{ php_packages }}"
+    state: latest
+
+- name: Ensure php-fpm is started and enabled at boot.
+  service:
+    name: "{{ fpm_service }}"
+    state: started
+    enabled: yes
+    use: "{{ init_system | default(omit) }}"
+
+- include: "permissions.yml"
+- include: "composer.yml"
+- include: "configure.yml"

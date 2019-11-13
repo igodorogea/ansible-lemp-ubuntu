@@ -1,0 +1,22 @@
+---
+- name: Apt update
+  apt:
+    upgrade: dist
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+    dpkg_options: 'force-confdef,force-confold'
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Apt cleanup
+  apt:
+    autoclean: yes
+    autoremove: yes
+
+- name: Install common packages
+  apt:
+    name: "{{ common_pkgs }}"
+    state: latest
+
+- include: user.yml
+- include: www-data.yml

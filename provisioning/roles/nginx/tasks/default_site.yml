@@ -1,0 +1,29 @@
+---
+- name: 'Backup default vhost: 1. Check if exist'
+  stat: "path={{ nginx_default_site }}"
+  register: default_vhost
+
+- name: 'Backup default vhost: 2. Move file'
+  shell: >
+    mv {{ nginx_default_site }} {{ nginx_default_site }}.bak
+    creates={{ nginx_default_site }}.bak
+  when: default_vhost.stat.exists
+  notify: restart nginx
+
+- name: Create new default vhost
+  template:
+    src: default-vhost.conf
+    dest: "{{ nginx_conf_dir }}/localhost.conf"
+  notify: restart nginx
+
+- name: Create NEOS default vhost
+  template:
+    src: neos-vhost.conf
+    dest: "{{ nginx_conf_dir }}/neos-demo.conf"
+  notify: restart nginx
+
+- name: Create TYPO3 default vhost
+  template:
+    src: typo3-vhost.conf
+    dest: "{{ nginx_conf_dir }}/typo3-demo.conf"
+  notify: restart nginx
